@@ -1,7 +1,7 @@
 ﻿using FCG_Users.Domain.Shared;
+using FCG_Users.Domain.Users.Enums;
 using FCG_Users.Domain.Users.Exceptions;
 using FCG_Users.Domain.Users.Exceptions.Account;
-using Fgc.Domain.Usuario.Enums;
 using Fgc.Domain.Usuario.ObjetosDeValor;
 
 namespace FCG_Users.Domain.Users.Entities

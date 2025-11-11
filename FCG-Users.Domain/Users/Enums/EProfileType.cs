@@ -1,4 +1,4 @@
-﻿namespace Fgc.Domain.Usuario.Enums
+﻿namespace FCG_Users.Domain.Users.Enums
 {
     public enum EProfileType
     {
