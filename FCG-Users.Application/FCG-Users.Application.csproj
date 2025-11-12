@@ -7,6 +7,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+   <ItemGroup>
+	 <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
+	 <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\FCG-Users.Domain\FCG-Users.Domain.csproj" />
   </ItemGroup>

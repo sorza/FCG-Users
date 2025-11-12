@@ -1,9 +1,9 @@
 ﻿using FCG_Users.Domain.Users.Entities;
 using FCG_Users.Infrastructure.Shared.Context;
 using FCG_Users.Infrastructure.Shared.Repositories;
-using FCG_Users.Application.Shared.Repositories;
 using Fgc.Domain.Usuario.ObjetosDeValor;
 using Microsoft.EntityFrameworkCore;
+using FCG_Users.Application.Shared.Repositories;
 
 namespace FCG_Users.Infrastructure.Users.Repositorories
 {
