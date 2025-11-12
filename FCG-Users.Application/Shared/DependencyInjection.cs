@@ -9,9 +9,8 @@ namespace FCG_Users.Application.Shared
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IValidator<AccountRequest>, AccountRequestValidator>();
             services.AddScoped<IValidator<AuthRequest>, AuthRequestValidator>();

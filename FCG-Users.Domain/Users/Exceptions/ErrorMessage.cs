@@ -18,7 +18,7 @@
         public class PasswordErrorMessages
         {
             public string NullOrEmpty { get; } = "A senha deve ser informada";
-            public string Invalid { get; } = "A senha informada é inválido";
+            public string Invalid { get; } = "A senha informada é inválida";
         }
 
         public class AccountErrorMessages
