@@ -1,10 +1,8 @@
 ﻿using FCG_Users.Application.Shared.Results;
 using FCG_Users.Application.Users.Interfaces;
 using FCG_Users.Application.Users.Requests;
-using Fgc.Domain.Usuario.ObjetosDeValor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace FCG_Users.Api.Controllers
