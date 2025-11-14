@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
+	<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.20.1" />
+=======
+>>>>>>> parent of f2b5f1e (Configurando ServiceBus e publicando eventos)
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>

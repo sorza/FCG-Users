@@ -13,15 +13,10 @@ namespace FCG_Users.Api
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            var builder = WebApplication.CreateBuilder(args);            
             
-            // Registro de serviços
-            builder.Services.AddInfrastructureServices();
-            builder.Services.AddApplicationServices();
-
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<UsersDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            builder.Services.AddInfrastructureServices(builder.Configuration);
+            builder.Services.AddApplicationServices();           
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

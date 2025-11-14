@@ -7,6 +7,7 @@
     <RootNamespace>FCG_Users.Api</RootNamespace>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<NoWarn>$(NoWarn);1591</NoWarn>
+    <UserSecretsId>006858b1-19d7-4390-b0f6-3f7a5924d144</UserSecretsId>
   </PropertyGroup>
 
 	<ItemGroup>
