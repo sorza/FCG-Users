@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCG-Users.Application", "FC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCG-Users.Domain", "FCG-Users.Domain\FCG-Users.Domain.csproj", "{37198C0C-AC09-41D6-BB23-4F7179C19726}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCG-Users.Infrastructure", "FCG-Users.Infrastructure\FCG-Users.Infrastructure.csproj", "{FAC5B0D3-DA5C-4177-A867-411173F5179C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCG-Users.Infrastructure", "FCG-Users.Infrastructure\FCG-Users.Infrastructure.csproj", "{DC6B374E-421C-403A-9BEE-16F706B9FD2D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{37198C0C-AC09-41D6-BB23-4F7179C19726}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37198C0C-AC09-41D6-BB23-4F7179C19726}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37198C0C-AC09-41D6-BB23-4F7179C19726}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FAC5B0D3-DA5C-4177-A867-411173F5179C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FAC5B0D3-DA5C-4177-A867-411173F5179C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FAC5B0D3-DA5C-4177-A867-411173F5179C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FAC5B0D3-DA5C-4177-A867-411173F5179C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC6B374E-421C-403A-9BEE-16F706B9FD2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC6B374E-421C-403A-9BEE-16F706B9FD2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC6B374E-421C-403A-9BEE-16F706B9FD2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC6B374E-421C-403A-9BEE-16F706B9FD2D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
