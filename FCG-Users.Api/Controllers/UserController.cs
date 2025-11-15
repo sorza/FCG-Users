@@ -116,6 +116,12 @@ namespace FCG_Users.Api.Controllers
             });
         }
 
+        /// <summary>
+        /// Remove um cadastro de usuário do sistema
+        /// </summary>
+        /// <param name="id">Id do usuário</param>
+        /// <param name="cancellationToken">Token para monitorar o cancelamento da operação.</param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id:guid}")]
