@@ -21,39 +21,45 @@ namespace FCG_Users.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
         public async Task<IResult> CreateUserAsync(AccountRequest request, CancellationToken cancellation = default)
-        {
-            try
-            {
-                var result = await service.CreateAccountAsync(request, cancellation);
+        {            
+            var result = await service.CreateAccountAsync(request, cancellation);
 
-                IResult response = result.IsSuccess
-                    ? TypedResults.Created($"/user/{result.Value.Id}", result.Value)
-                    : TypedResults.Conflict(new Error("409", result.Error.Message));
-
-                return response;
-            }
-            catch (Exception ex)
+            if (result.IsFailure)
             {
-                return TypedResults.BadRequest(new Error("400", ex.Message));
+                return result.Error.Code switch
+                {                   
+                    "409" => TypedResults.Conflict(new Error("409", result.Error.Message)),
+                    _ => TypedResults.BadRequest(new Error("400", result.Error.Message))
+                };
             }
+
+            return TypedResults.Created($"/users/{result.Value}", result.Value);
         }
-        
+
+        /// <summary>
+        /// Busca um usuário pelo id.
+        /// </summary>
+        /// <param name="id">Id do usuário</param>
+        /// <param name="cancellation">Token de controle para monitorar cancelamento do processo.</param>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{id:guid}")]
         public async Task<IResult> GetUserByIdAsync(Guid id, CancellationToken cancellation = default)
-        {
-            try
-            {
-                var result = await service.GetUserById(id, cancellation);
+        {           
+            var result = await service.GetUserById(id, cancellation);
 
-                IResult response = result.IsSuccess
-                    ? TypedResults.Ok(result.Value)
-                    : TypedResults.NotFound(new Error("404", result.Error.Message));
-                return response;
-            }
-            catch(Exception ex)
+            if (result.IsFailure)
             {
-                return TypedResults.BadRequest(new Error("400", ex.Message));
-            }           
+                return result.Error.Code switch
+                {
+                    "404" => TypedResults.NotFound(new Error("404", result.Error.Message)),                   
+                    _ => TypedResults.BadRequest(new Error("400", result.Error.Message))
+                };
+            }
+
+            return TypedResults.Ok(result.Value);
+
         }
 
         /// <summary>
@@ -69,26 +75,19 @@ namespace FCG_Users.Api.Controllers
         [HttpPost]
         [Route("auth")]
         public async Task<IResult> AuthAsync(AuthRequest request, CancellationToken cancellation = default)
-        {
-            try
+        {           
+            var result = await service.AuthAsync(request, cancellation);
+
+            if (result.IsFailure)
             {
-                var result = await service.AuthAsync(request, cancellation);
-
-                IResult response = result.IsSuccess
-                    ? TypedResults.Ok(result.Value)
-                    : result.Error.Code switch
-                    {
-                        "401" => TypedResults.Unauthorized(),
-                        _ => TypedResults.Forbid()
-                    };
-
-                return response;
-
+                return result.Error.Code switch
+                {
+                    "401" => TypedResults.Unauthorized(),
+                    "403" => TypedResults.Forbid(),
+                    _ => TypedResults.BadRequest(new Error("400", result.Error.Message))
+                };
             }
-            catch (Exception ex)
-            {
-                return TypedResults.BadRequest(new Error("400", ex.Message));
-            }
+            return TypedResults.Ok(result.Value);          
         }
 
         /// <summary>
