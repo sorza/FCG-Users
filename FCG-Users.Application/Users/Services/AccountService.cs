@@ -55,5 +55,21 @@ namespace FCG_Users.Application.Users.Services
             ));
 
         }
+
+        public async Task<Result<AccountResponse>> GetUserById(Guid id, CancellationToken cancellationToken = default)
+        {
+            var user = await repository.GetByIdAsync(id);
+            if (user is null)
+                return Result.Failure<AccountResponse>(new Error("404", "Usuário não encontrado."));
+
+            return Result.Success(new AccountResponse(
+                user.Id,
+                user.Name,
+                user.Password,
+                user.Email,
+                user.Profile,
+                user.Active
+                ));            
+        }
     }
 }

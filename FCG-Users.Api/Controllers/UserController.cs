@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace FCG_Users.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("users")]
     public class UserController(IAccountService service) : ControllerBase
     {
         /// <summary>
@@ -36,6 +36,24 @@ namespace FCG_Users.Api.Controllers
             {
                 return TypedResults.BadRequest(new Error("400", ex.Message));
             }
+        }
+        
+        [HttpGet("{id:guid}")]
+        public async Task<IResult> GetUserByIdAsync(Guid id, CancellationToken cancellation = default)
+        {
+            try
+            {
+                var result = await service.GetUserById(id, cancellation);
+
+                IResult response = result.IsSuccess
+                    ? TypedResults.Ok(result.Value)
+                    : TypedResults.NotFound(new Error("404", result.Error.Message));
+                return response;
+            }
+            catch(Exception ex)
+            {
+                return TypedResults.BadRequest(new Error("400", ex.Message));
+            }           
         }
 
         /// <summary>
