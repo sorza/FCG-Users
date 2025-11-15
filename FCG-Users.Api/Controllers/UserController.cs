@@ -47,7 +47,7 @@ namespace FCG_Users.Api.Controllers
         [HttpGet("{id:guid}")]
         public async Task<IResult> GetUserByIdAsync(Guid id, CancellationToken cancellation = default)
         {           
-            var result = await service.GetUserById(id, cancellation);
+            var result = await service.GetUserAsync(id, cancellation);
 
             if (result.IsFailure)
             {
@@ -114,8 +114,20 @@ namespace FCG_Users.Api.Controllers
                 Name = name,
                 Role = role
             });
-
         }
 
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpDelete("{id:guid}")]
+        public async Task<IResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var result = await service.RemoveUserAsync(id, cancellationToken);
+
+            IResult response = result.IsSuccess
+                ? TypedResults.NoContent()
+                : TypedResults.NotFound(new Error("404",result.Error.Message));
+
+            return response;
+        }
     }
 }

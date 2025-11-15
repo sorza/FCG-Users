@@ -8,7 +8,7 @@ namespace FCG_Users.Application.Users.Interfaces
     {
         Task<Result<AccountResponse>> CreateAccountAsync(AccountRequest request, CancellationToken cancellationToken = default);
         Task<Result<AuthResponse>> AuthAsync(AuthRequest request, CancellationToken cancellationToken = default);
-        Task<Result<AccountResponse>> GetUserById(Guid id, CancellationToken cancellationToken = default);
-
+        Task<Result<AccountResponse>> GetUserAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<Result> RemoveUserAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }

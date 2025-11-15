@@ -9,7 +9,7 @@ using Fgc.Domain.Usuario.ObjetosDeValor;
 
 namespace FCG_Users.Application.Users.Services
 {
-    public class AccountService(IAccountRepository repository, IJwtTokenService jwtService) : IAccountService
+    public class AccountService(IAccountRepository repository, IJwtTokenService jwtService, IEventPublisher publisher) : IAccountService
     {
         public async Task<Result<AuthResponse>> AuthAsync(AuthRequest request, CancellationToken cancellationToken = default)
         {
@@ -56,7 +56,7 @@ namespace FCG_Users.Application.Users.Services
 
         }
 
-        public async Task<Result<AccountResponse>> GetUserById(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Result<AccountResponse>> GetUserAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var user = await repository.GetByIdAsync(id);
             if (user is null)
@@ -70,6 +70,28 @@ namespace FCG_Users.Application.Users.Services
                 user.Profile,
                 user.Active
                 ));            
+        }
+
+        public async Task<Result> RemoveUserAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var usuario = await repository.GetByIdAsync(id);
+
+            if (usuario is null)
+                return Result.Failure(new Error("404", "Usuário não encontrado"));
+
+            await repository.DeleteAsync(id);
+            
+            var evt = new UserDeleted(usuario.Id);
+            await publisher.PublishAsync(evt, "UserDeleted");
+
+            return Result.Success(new AccountResponse(
+                usuario.Id,
+                usuario.Name,
+                usuario.Password,
+                usuario.Email,
+                usuario.Profile,
+                usuario.Active
+                ));
         }
     }
 }
