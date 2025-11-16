@@ -7,13 +7,14 @@ using FCG_Users.Application.Users.Responses;
 using FCG_Users.Domain.Users.Entities;
 using FCG_Users.Domain.Users.Enums;
 using Fgc.Domain.Usuario.ObjetosDeValor;
+using FluentValidation;
 
 namespace FCG_Users.Application.Users.Services
 {
-    public class AccountService(IAccountRepository repository, IJwtTokenService jwtService, IEventPublisher publisher) : IAccountService
+    public class AccountService(IAccountRepository repository, IJwtTokenService jwtService, IEventPublisher publisher, IValidator<AccountRequest> validator) : IAccountService
     {
         public async Task<Result<AuthResponse>> AuthAsync(AuthRequest request, CancellationToken cancellationToken = default)
-        {
+        {           
             var email = Email.Create(request.Email);
 
             var conta = await repository.Auth(email, cancellationToken);
@@ -37,6 +38,10 @@ namespace FCG_Users.Application.Users.Services
 
         public async Task<Result<AccountResponse>> CreateAccountAsync(AccountRequest request, CancellationToken cancellationToken = default)
         {
+            var validation = validator.Validate(request);
+            if (!validation.IsValid)
+                return Result.Failure<AccountResponse>(new Error("400", string.Join("; ", validation.Errors.Select(e => e.ErrorMessage))));
+
             var userExists = await repository.Exists(request.Email, cancellationToken);
 
             if (userExists)
