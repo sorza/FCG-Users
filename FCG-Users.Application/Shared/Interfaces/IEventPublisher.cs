@@ -1,7 +1,5 @@
-﻿
-namespace FCG_Users.Application.Users.Interfaces
+﻿namespace FCG_Users.Application.Shared.Interfaces
 {
-    public record UserDeleted(Guid ItemId);
     public interface IEventPublisher
     {
         Task PublishAsync<T>(T evt, string subject);

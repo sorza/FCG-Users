@@ -1,5 +1,5 @@
-﻿using FCG_Users.Application.Shared.Results;
-using FCG_Users.Application.Users.Interfaces;
+﻿using FCG_Users.Application.Shared.Interfaces;
+using FCG_Users.Application.Shared.Results;
 using FCG_Users.Application.Users.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

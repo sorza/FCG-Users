@@ -1,6 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
+using FCG_Users.Application.Shared.Interfaces;
 using FCG_Users.Application.Shared.Repositories;
-using FCG_Users.Application.Users.Interfaces;
 using FCG_Users.Infrastructure.Shared.Context;
 using FCG_Users.Infrastructure.Shared.Services;
 using FCG_Users.Infrastructure.Users.Events;

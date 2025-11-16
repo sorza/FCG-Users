@@ -1,6 +1,6 @@
 ﻿using FCG_Users.Domain.Users.Entities;
 
-namespace FCG_Users.Application.Users.Interfaces
+namespace FCG_Users.Application.Shared.Interfaces
 {
     public interface IJwtTokenService
     {

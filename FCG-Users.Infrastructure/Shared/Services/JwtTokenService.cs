@@ -1,4 +1,4 @@
-﻿using FCG_Users.Application.Users.Interfaces;
+﻿using FCG_Users.Application.Shared.Interfaces;
 using FCG_Users.Domain.Users.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

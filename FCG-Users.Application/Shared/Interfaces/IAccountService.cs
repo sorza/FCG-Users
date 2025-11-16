@@ -2,7 +2,7 @@
 using FCG_Users.Application.Users.Requests;
 using FCG_Users.Application.Users.Responses;
 
-namespace FCG_Users.Application.Users.Interfaces
+namespace FCG_Users.Application.Shared.Interfaces
 {
     public interface IAccountService
     {

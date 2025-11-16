@@ -1,5 +1,5 @@
 ﻿using Azure.Messaging.ServiceBus;
-using FCG_Users.Application.Users.Interfaces;
+using FCG_Users.Application.Shared.Interfaces;
 using System.Text.Json;
 
 namespace FCG_Users.Infrastructure.Users.Events

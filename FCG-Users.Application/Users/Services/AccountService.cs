@@ -1,6 +1,7 @@
-﻿using FCG_Users.Application.Shared.Repositories;
+﻿using FCG.Shared.Contracts;
+using FCG_Users.Application.Shared.Interfaces;
+using FCG_Users.Application.Shared.Repositories;
 using FCG_Users.Application.Shared.Results;
-using FCG_Users.Application.Users.Interfaces;
 using FCG_Users.Application.Users.Requests;
 using FCG_Users.Application.Users.Responses;
 using FCG_Users.Domain.Users.Entities;
@@ -44,7 +45,10 @@ namespace FCG_Users.Application.Users.Services
             var account = Account.Create(request.Name, request.Password, request.Email, EProfileType.Common);
 
             await repository.CreateAsync(account, cancellationToken);
-            
+
+            var evt = new UserCreatedEvent(account.Id, account.Name, account.Email, account.Profile.ToString(), account.Active);
+            await publisher.PublishAsync(evt, "UserCreated");
+
             return Result.Success(new AccountResponse(
                 account.Id,
                 account.Name,
@@ -81,7 +85,7 @@ namespace FCG_Users.Application.Users.Services
 
             await repository.DeleteAsync(id);
             
-            var evt = new UserDeleted(usuario.Id);
+            var evt = new UserDeletedEvent(usuario.Id);
             await publisher.PublishAsync(evt, "UserDeleted");
 
             return Result.Success(new AccountResponse(

@@ -1,4 +1,4 @@
-﻿using FCG_Users.Application.Users.Interfaces;
+﻿using FCG_Users.Application.Shared.Interfaces;
 using FCG_Users.Application.Users.Requests;
 using FCG_Users.Application.Users.Services;
 using FCG_Users.Application.Users.Validators;
