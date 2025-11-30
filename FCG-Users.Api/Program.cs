@@ -100,7 +100,12 @@ namespace FCG_Users.Api
 
             var app = builder.Build();
 
-            // Handler de erros globais
+            app.MapGet("/", context =>
+            {
+                context.Response.Redirect("/swagger", permanent: false);
+                return Task.CompletedTask;
+            });
+            
             app.UseExceptionHandler(errorApp =>
             {
                 errorApp.Run(async context =>
