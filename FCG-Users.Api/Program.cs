@@ -96,6 +96,11 @@ namespace FCG_Users.Api
                     policy.RequireRole("Admin"));
             });
 
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenAnyIP(80); 
+            });
+
             var app = builder.Build();
 
             // Handler de erros globais
@@ -128,7 +133,6 @@ namespace FCG_Users.Api
                     await context.Response.WriteAsJsonAsync(problem);
                 });
             });
-
 
             using (var scope = app.Services.CreateScope())
             {
