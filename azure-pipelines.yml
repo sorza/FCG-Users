@@ -8,21 +8,21 @@ variables:
   acrName: 'fcgregistries.azurecr.io'
   dockerRegistryServiceConnection: '576941a1-c337-49cf-af7a-81750fcd6af9'
   tag: '$(Build.BuildId)'
-  buildContext: '$(Build.SourcesDirectory)'  # build context ajustado para enxergar tudo
+  buildContext: '$(Build.SourcesDirectory)'
 
 stages:
 - stage: BuildAndPush
-  displayName: Build and Push Games API
+  displayName: Build and Push Images
   jobs:
-  - job: BuildGamesApi
-    displayName: Build FCG-Games API
+  - job: BuildApi
+    displayName: Build Users API
     steps:
     - task: Docker@2
-      displayName: Build and Push Games API Image
+      displayName: Build and Push API Image
       inputs:
         command: buildAndPush
-        repository: 'fcg-games-api'
-        dockerfile: '$(Build.SourcesDirectory)/FCG-Games.Api/Dockerfile'
+        repository: 'fcg-users-api'
+        dockerfile: '$(Build.SourcesDirectory)/FCG-Users.Api/Dockerfile'
         containerRegistry: $(dockerRegistryServiceConnection)
         buildContext: $(buildContext)
         tags: |
