@@ -151,15 +151,21 @@ namespace FCG_Users.Api
             }
             
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fcg.Users.Api v1");
-                c.RoutePrefix = string.Empty; 
-            });
+            app.UseSwaggerUI();
 
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
+
+            app.MapGet("/health", () =>
+            {
+                return Results.Ok(new
+                {
+                    status = "Healthy",
+                    timestamp = DateTime.UtcNow
+                });
+            });
+            
             app.Run();
         }
     }
