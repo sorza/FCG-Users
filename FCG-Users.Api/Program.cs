@@ -18,11 +18,6 @@ namespace FCG_Users.Api
             var builder = WebApplication.CreateBuilder(args);   
 
             builder.WebHost.UseUrls("http://0.0.0.0:80");
-
-             builder.WebHost.ConfigureKestrel(options =>
-            {
-                options.ListenAnyIP(80); 
-            });         
             
             builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddApplicationServices();           
