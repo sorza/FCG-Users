@@ -27,3 +27,4 @@ stages:
         buildContext: $(buildContext)
         tags: |
           $(tag)
+          latest
