@@ -15,7 +15,12 @@ namespace FCG_Users.Api
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);            
+            var builder = WebApplication.CreateBuilder(args);   
+
+             builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenAnyIP(80); 
+            });         
             
             builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddApplicationServices();           
@@ -94,11 +99,6 @@ namespace FCG_Users.Api
             {
                 options.AddPolicy("SomenteAdmin", policy =>
                     policy.RequireRole("Admin"));
-            });
-
-            builder.WebHost.ConfigureKestrel(options =>
-            {
-                options.ListenAnyIP(80); 
             });
 
             var app = builder.Build();
