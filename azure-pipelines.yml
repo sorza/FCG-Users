@@ -12,13 +12,13 @@ variables:
 
 stages:
 - stage: BuildAndPush
-  displayName: Build and Push Images
+  displayName: Build and Push Games API
   jobs:
-  - job: BuildApi
-    displayName: Build Games API
+  - job: BuildGamesApi
+    displayName: Build FCG-Games API
     steps:
     - task: Docker@2
-      displayName: Build and Push API Image
+      displayName: Build and Push Games API Image
       inputs:
         command: buildAndPush
         repository: 'fcg-games-api'
