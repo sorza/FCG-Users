@@ -8,7 +8,7 @@ variables:
   acrName: 'fcgregistries.azurecr.io'
   dockerRegistryServiceConnection: '576941a1-c337-49cf-af7a-81750fcd6af9'
   tag: '$(Build.BuildId)'
-  buildContext: '$(Build.SourcesDirectory)'
+  buildContext: '$(Build.SourcesDirectory)'  # build context ajustado para enxergar tudo
 
 stages:
 - stage: BuildAndPush
