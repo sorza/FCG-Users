@@ -1,39 +1,29 @@
-# Docker
-# Build and push an image to Azure Container Registry
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
 - main
 
-resources:
-- repo: self
+pool:
+  name: 'LocalPool'
 
 variables:
-  # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '7879787b-f199-44b6-97c4-7f868d11b0b3'
-  imageRepository: 'fcgusers'
-  containerRegistry: 'fcgregistries.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/FCG-Users.Api/Dockerfile'
+  acrName: 'fcgregistries.azurecr.io'
+  dockerRegistryServiceConnection: '576941a1-c337-49cf-af7a-81750fcd6af9'
   tag: '$(Build.BuildId)'
-
-  # Agent VM image name
-  vmImageName: 'LocalPool'
+  buildContext: '$(Build.SourcesDirectory)'
 
 stages:
-- stage: Build
-  displayName: Build and push stage
+- stage: BuildAndPush
+  displayName: Build and Push Images
   jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      name: $(vmImageName)
+  - job: BuildApi
+    displayName: Build Games API
     steps:
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: Build and Push API Image
       inputs:
         command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
+        repository: 'fcg-games-api'
+        dockerfile: '$(Build.SourcesDirectory)/FCG-Games.Api/Dockerfile'
         containerRegistry: $(dockerRegistryServiceConnection)
+        buildContext: $(buildContext)
         tags: |
           $(tag)
