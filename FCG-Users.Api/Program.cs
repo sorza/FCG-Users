@@ -99,12 +99,6 @@ namespace FCG_Users.Api
             });
 
             var app = builder.Build();
-
-            app.MapGet("/", context =>
-            {
-                context.Response.Redirect("/swagger", permanent: false);
-                return Task.CompletedTask;
-            });
             
             app.UseExceptionHandler(errorApp =>
             {
@@ -157,7 +151,11 @@ namespace FCG_Users.Api
             }
             
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fcg.Users.Api v1");
+                c.RoutePrefix = string.Empty; 
+            });
 
             app.UseHttpsRedirection();
             app.UseAuthorization();
