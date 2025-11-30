@@ -157,7 +157,7 @@ namespace FCG_Users.Api
                 c.RoutePrefix = string.Empty; 
             });
 
-            //app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
             app.Run();
