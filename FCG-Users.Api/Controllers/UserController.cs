@@ -12,17 +12,18 @@ namespace FCG_Users.Api.Controllers
     public class UserController(IAccountService service) : ControllerBase
     {
         /// <summary>
-        /// Cadastra um novo usuário no sistema.
+        /// Solicita o cadastro de um novo usuário no sistema.
         /// </summary>
         /// <param name="request">Dados necessários para o cadastro do usuário.</param>
         /// <param name="cancellation">Token para monitorar o cancelamento da requisição.</param>  
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
         public async Task<IResult> CreateUserAsync(AccountRequest request, CancellationToken cancellation = default)
-        {            
-            var result = await service.CreateAccountAsync(request, cancellation);
+        {
+            var correlationId = HttpContext.Items["CorrelationId"]?.ToString();
+            var result = await service.CreateAccountAsync(request, correlationId!, cancellation);
 
             if (result.IsFailure)
             {
@@ -33,7 +34,7 @@ namespace FCG_Users.Api.Controllers
                 };
             }
 
-            return TypedResults.Created($"/users/{result.Value}", result.Value);
+            return TypedResults.Accepted($"/users/{result.Value.Id}", new { User = result.Value, CorrelationId = correlationId });
         }
 
         /// <summary>
@@ -117,20 +118,21 @@ namespace FCG_Users.Api.Controllers
         }
 
         /// <summary>
-        /// Remove um cadastro de usuário do sistema
+        /// Solicita a exclusão de um cadastro de usuário do sistema
         /// </summary>
         /// <param name="id">Id do usuário</param>
         /// <param name="cancellationToken">Token para monitorar o cancelamento da operação.</param>
         /// <returns></returns>
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id:guid}")]
         public async Task<IResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var result = await service.RemoveUserAsync(id, cancellationToken);
+            var correlationId = HttpContext.Items["CorrelationId"]?.ToString();
+            var result = await service.RemoveUserAsync(id, correlationId!,cancellationToken);
 
             IResult response = result.IsSuccess
-                ? TypedResults.NoContent()
+                ? TypedResults.Accepted($"/users/status/{correlationId}", new { UserId = id, CorrelationId = correlationId })
                 : TypedResults.NotFound(new Error("404",result.Error.Message));
 
             return response;

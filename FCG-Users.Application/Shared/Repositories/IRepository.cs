@@ -1,4 +1,4 @@
-﻿using FCG_Users.Domain.Shared;
+﻿using FCG.Shared.Contracts.ClassDefinition;
 
 namespace FCG_Users.Application.Shared.Repositories
 {

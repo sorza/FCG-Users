@@ -1,4 +1,4 @@
-﻿using FCG_Users.Domain.Shared;
+﻿using FCG.Shared.Contracts.ClassDefinition;
 using FCG_Users.Domain.Users.Enums;
 using FCG_Users.Domain.Users.Exceptions;
 using FCG_Users.Domain.Users.Exceptions.Account;
@@ -18,6 +18,14 @@ namespace FCG_Users.Domain.Users.Entities
         {
             Name = name;
             Password = password;
+            Email = email;
+            Profile = profile;
+        }
+
+        private Account(Guid id, string name, string password, Email email, EProfileType profile) : base(id)
+        {
+            Name = name;
+            Password = Password.CreateFromHash(password);
             Email = email;
             Profile = profile;
         }
@@ -47,6 +55,22 @@ namespace FCG_Users.Domain.Users.Entities
             var email_result = Email.Create(email);
 
             return new Account(Guid.NewGuid(), name, senha_result, email_result, profile);
+        }
+
+        public static Account Create(string name, string passwordHash, string email, EProfileType profile, bool active)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new NullOrEmptyNameException(ErrorMessage.Account.NullOrEmpty);
+
+            if (!Enum.IsDefined(typeof(EProfileType), profile))
+                throw new InvalidProfileException(ErrorMessage.Account.InvalidProfileType);
+           
+            var email_result = Email.Create(email);
+
+            var account = new Account(Guid.NewGuid(), name, passwordHash, email_result, profile);
+            account.Active = active;
+
+            return account;
         }
 
         #endregion

@@ -1,6 +1,8 @@
 ﻿using Azure.Messaging.ServiceBus;
+using FCG.Shared.Contracts.Interfaces;
 using FCG_Users.Application.Shared.Interfaces;
 using FCG_Users.Application.Shared.Repositories;
+using FCG_Users.Infrastructure.Mongo;
 using FCG_Users.Infrastructure.Shared.Context;
 using FCG_Users.Infrastructure.Shared.Services;
 using FCG_Users.Infrastructure.Users.Events;
@@ -8,6 +10,7 @@ using FCG_Users.Infrastructure.Users.Repositorories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 
 namespace FCG_Users.Infrastructure.Shared
 {
@@ -19,18 +22,25 @@ namespace FCG_Users.Infrastructure.Shared
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             var connectionString = configuration["ServiceBus:ConnectionString"];
-            var queueName = configuration["ServiceBus:Queues:UsersEvents"];
+            var topic = configuration["ServiceBus:Topics:Users"];
 
             services.AddSingleton(new ServiceBusClient(connectionString));
 
             services.AddScoped<IEventPublisher>(sp =>
             {
                 var client = sp.GetRequiredService<ServiceBusClient>();
-                return new ServiceBusEventPublisher(client, queueName!);
+                return new ServiceBusEventPublisher(client, topic!);
+            });
+
+            services.AddSingleton<IMongoClient>(sp =>
+            {
+                var mongoString = configuration["MongoSettings:ConnectionString"];
+                return new MongoClient(mongoString);
             });
 
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddSingleton<IJwtTokenService, JwtTokenService>();
+            services.AddScoped<IEventStore, MongoEventStore>();
 
             return services;
         }

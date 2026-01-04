@@ -1,4 +1,5 @@
-﻿using FCG_Users.Application.Shared.Interfaces;
+﻿using FCG.Shared.Contracts.Interfaces;
+using FCG_Users.Application.Shared.Interfaces;
 using FCG_Users.Application.Users.Requests;
 using FCG_Users.Application.Users.Services;
 using FCG_Users.Application.Users.Validators;
@@ -11,7 +12,7 @@ namespace FCG_Users.Application.Shared
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAccountService, AccountService>();            
             services.AddScoped<IValidator<AccountRequest>, AccountRequestValidator>();
             services.AddScoped<IValidator<AuthRequest>, AuthRequestValidator>();
 

@@ -1,4 +1,4 @@
-﻿using FCG_Users.Domain.Shared;
+﻿using FCG.Shared.Contracts.ClassDefinition;
 using FCG_Users.Domain.Users.Exceptions;
 using FCG_Users.Domain.Users.Exceptions.Email;
 using System.Text.RegularExpressions;

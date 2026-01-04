@@ -1,4 +1,4 @@
-﻿using FCG_Users.Domain.Shared;
+﻿using FCG.Shared.Contracts.ClassDefinition;
 using FCG_Users.Domain.Users.Exceptions;
 using FCG_Users.Domain.Users.Exceptions.Password;
 using System.Security.Cryptography;
@@ -57,6 +57,27 @@ namespace Fgc.Domain.Usuario.ObjetosDeValor
 
         }
 
+        public static Password CreateFromHash(string hash)
+        {
+            if (string.IsNullOrWhiteSpace(hash))
+                throw new InvalidPasswordException(ErrorMessage.Password.Invalid);
+
+            byte[] data;
+            try
+            {
+                data = Convert.FromBase64String(hash);
+            }
+            catch
+            {
+                throw new InvalidPasswordException(ErrorMessage.Password.Invalid);
+            }
+           
+            if (data.Length != 48)
+                throw new InvalidPasswordException(ErrorMessage.Password.Invalid);
+
+            return new Password(hash);
+        }
+
         #endregion
 
         #region Methods
@@ -77,6 +98,9 @@ namespace Fgc.Domain.Usuario.ObjetosDeValor
             return CryptographicOperations.FixedTimeEquals(computedHash, storedHash);
 
         }
+              
+
+        
         #endregion
 
         #region Operators

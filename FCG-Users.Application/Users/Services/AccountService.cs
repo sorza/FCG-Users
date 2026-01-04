@@ -1,4 +1,5 @@
-﻿using FCG.Shared.Contracts;
+﻿using FCG.Shared.Contracts.Events.Domain.Users;
+using FCG.Shared.Contracts.Interfaces;
 using FCG_Users.Application.Shared.Interfaces;
 using FCG_Users.Application.Shared.Repositories;
 using FCG_Users.Application.Shared.Results;
@@ -11,7 +12,7 @@ using FluentValidation;
 
 namespace FCG_Users.Application.Users.Services
 {
-    public class AccountService(IAccountRepository repository, IJwtTokenService jwtService, IEventPublisher publisher, IValidator<AccountRequest> validator) : IAccountService
+    public class AccountService(IAccountRepository repository, IJwtTokenService jwtService, IEventPublisher publisher, IValidator<AccountRequest> validator, IEventStore eventStore) : IAccountService
     {
         public async Task<Result<AuthResponse>> AuthAsync(AuthRequest request, CancellationToken cancellationToken = default)
         {           
@@ -36,7 +37,7 @@ namespace FCG_Users.Application.Users.Services
 
         }
 
-        public async Task<Result<AccountResponse>> CreateAccountAsync(AccountRequest request, CancellationToken cancellationToken = default)
+        public async Task<Result<AccountResponse>> CreateAccountAsync(AccountRequest request, string correlationId, CancellationToken cancellationToken = default)
         {
             var validation = validator.Validate(request);
             if (!validation.IsValid)
@@ -49,10 +50,10 @@ namespace FCG_Users.Application.Users.Services
 
             var account = Account.Create(request.Name, request.Password, request.Email, EProfileType.Common);
 
-            await repository.CreateAsync(account, cancellationToken);
+            var evt = new UserCreatedEvent(account.Id.ToString(), account.Name,account.Password, account.Email, account.Profile.ToString(), account.Active);
 
-            var evt = new UserCreatedEvent(account.Id, account.Name, account.Email, account.Profile.ToString(), account.Active);
-            await publisher.PublishAsync(evt, "UserCreated");
+            await eventStore.AppendAsync(account.Id.ToString(), evt, 0, correlationId);
+            await publisher.PublishAsync(evt, "UserCreated", correlationId);
 
             return Result.Success(new AccountResponse(
                 account.Id,
@@ -81,17 +82,16 @@ namespace FCG_Users.Application.Users.Services
                 ));            
         }
 
-        public async Task<Result> RemoveUserAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Result> RemoveUserAsync(Guid id, string correlationId, CancellationToken cancellationToken = default)
         {
             var usuario = await repository.GetByIdAsync(id);
 
             if (usuario is null)
                 return Result.Failure(new Error("404", "Usuário não encontrado"));
 
-            await repository.DeleteAsync(id);
             
-            var evt = new UserDeletedEvent(usuario.Id);
-            await publisher.PublishAsync(evt, "UserDeleted");
+            var evt = new UserDeletedEvent(usuario.Id.ToString(), usuario.Email);
+            await publisher.PublishAsync(evt, "UserDeleted", correlationId);
 
             return Result.Success(new AccountResponse(
                 usuario.Id,

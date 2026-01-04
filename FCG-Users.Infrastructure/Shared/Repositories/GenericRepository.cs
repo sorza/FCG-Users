@@ -1,5 +1,5 @@
-﻿using FCG_Users.Application.Shared.Repositories;
-using FCG_Users.Domain.Shared;
+﻿using FCG.Shared.Contracts.ClassDefinition;
+using FCG_Users.Application.Shared.Repositories;
 using FCG_Users.Infrastructure.Shared.Context;
 using Microsoft.EntityFrameworkCore;
 
