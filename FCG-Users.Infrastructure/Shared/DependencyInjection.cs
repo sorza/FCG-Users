@@ -1,8 +1,8 @@
 ﻿using Azure.Messaging.ServiceBus;
+using FCG.Shared.Contracts.Events.Store;
 using FCG.Shared.Contracts.Interfaces;
 using FCG_Users.Application.Shared.Interfaces;
 using FCG_Users.Application.Shared.Repositories;
-using FCG_Users.Infrastructure.Mongo;
 using FCG_Users.Infrastructure.Shared.Context;
 using FCG_Users.Infrastructure.Shared.Services;
 using FCG_Users.Infrastructure.Users.Events;
@@ -32,15 +32,20 @@ namespace FCG_Users.Infrastructure.Shared
                 return new ServiceBusEventPublisher(client, topic!);
             });
 
-            services.AddSingleton<IMongoClient>(sp =>
+            var mongoString = configuration["MongoSettings:ConnectionString"];
+            var mongoDb = configuration["MongoSettings:Database"];
+            var mongoCollection = configuration["MongoSettings:Collection"];
+
+            services.AddSingleton<IMongoClient>(sp => new MongoClient(mongoString));
+
+            services.AddScoped<IEventStore>(sp =>
             {
-                var mongoString = configuration["MongoSettings:ConnectionString"];
-                return new MongoClient(mongoString);
+                var client = sp.GetRequiredService<IMongoClient>();
+                return new MongoEventStore(client, mongoDb!, mongoCollection!);
             });
 
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddSingleton<IJwtTokenService, JwtTokenService>();
-            services.AddScoped<IEventStore, MongoEventStore>();
 
             return services;
         }
