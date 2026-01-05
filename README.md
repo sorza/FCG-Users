@@ -1,69 +1,83 @@
-# FCG-Users
+# 👤 FCG-Users
 
-Projeto: FCG-Users — serviço de gerenciamento de contas de usuário do conjunto de microserviços FCG.
+O projeto **FCG-Users** faz parte de um ecossistema de microsserviços voltado para gerenciamento de usuários e suas bibliotecas de jogos.  
+Ele foi desenvolvido com foco em **event sourcing**, **arquitetura orientada a eventos** e **boas práticas de microsserviços**.
 
-## Visão Geral
+---
 
-Este repositório implementa um serviço de usuários composto por uma API e um consumer (Worker Service) que consome eventos via Azure Service Bus. O sistema provê autenticação (JWT), criação/recuperação/remoção de contas e sincronização de usuários entre serviços, com senhas armazenadas de forma segura (PBKDF2).
+## Tecnologias Utilizadas
+- **.NET 8 / ASP.NET Core** → APIs modernas e performáticas.
+- **Entity Framework Core** → persistência e abstração de acesso ao banco de dados SQL Server.
+- **MongoDB** → armazenamento de eventos (Event Store).
+- **Azure Service Bus** → mensageria assíncrona baseada em tópicos e subscriptions.
+- **Docker** → containerização e execução isolada dos microsserviços.
+- **Swagger / Swashbuckle** → documentação interativa da API.
+- **FluentValidation** → validação de requests
+- **JWT** → autenticação e autorização
+- **PBKDF2** → Criptografia (salt + hash)
+
+---
 
 ## Arquitetura
+- **Microsserviços** → cada contexto (Users, Games, Libraries, Payments) é isolado e independente.
+- **Event-Driven Architecture (EDA)** → comunicação entre serviços via eventos publicados em tópicos do Service Bus.
+- **Event Sourcing** → todas as mudanças de estado dos usuários são registradas como eventos imutáveis.
+- **CQRS (Command Query Responsibility Segregation)** → separação entre comandos (alteração de estado) e queries (leitura).
+- **Camadas bem definidas**:
+  - **API** → exposição dos endpoints REST.
+  - **Application** → regras de negócio e orquestração.
+  - **Infrastructure** → persistência, mensageria e integrações externas.
+  - **Domain** → entidades e lógica de domínio.
 
-Visão geral:
-- Camadas bem definidas: Domain, Application, Infrastructure, Api/Consumer.
-- Estilo arquitetural: Onion / Hexagonal — a camada de domínio é isolada de infraestruturas externas.
-- Integração inter-serviços: orientada a eventos (pub/sub) via Azure Service Bus (Topics / Subscriptions).
-- Consumer implementado como Worker Service (BackgroundService) para processamento contínuo.
+---
 
-Fluxos principais:
-- Criação via API: validações → `Password.Create` (hash PBKDF2) → persistência → publicação de `UserCreated`.
-- Sincronização Consumer: consome eventos → valida/instancia entidades (aceita hash via fábrica `Password.FromHash`) → persiste/remover localmente.
-- Autenticação: credenciais validadas com `Password.Verify`, token JWT emitido.
+## Padrões e Designs
+- **Repository Pattern** → abstração do acesso a dados.
+- **Dependency Injection (DI)** → desacoplamento e facilidade de testes.
+- **Middleware personalizado** → tratamento global de exceções e correlação de requisições.
+- **Event Publisher/Consumer** → produtores e consumidores de eventos no Azure Service Bus.
+- **Idempotência** → prevenção de duplicidade no processamento de eventos.
+- **Dead Letter Queue (DLQ)** → resiliência e análise de mensagens problemáticas.
 
-## Tecnologias
+---
 
-- Linguagem: C# 
-- Web/API: ASP.NET Core
-- Worker: .NET Worker Service (BackgroundService)
-- Mensageria: Azure.Messaging.ServiceBus
-- Serialização: System.Text.Json
-- Validação: FluentValidation
-- Autenticação: JWT (ASP.NET Core)
-- Criptografia: PBKDF2 (salt + hash)
-- Logging: `ILogger<T>` (ASP.NET Core)
+## Fluxo de Eventos
+1. **Criação/remoção de usuários** gera eventos (`UserCreated`, `UserRemoved`).  
+2. Os eventos são persistidos no **MongoDB (Event Store)**.  
+3. Os eventos são publicados no **Azure Service Bus (users-topic)**.  
+4. Outros microsserviços (como **Libraries**) consomem esses eventos:
+   - Se um **User** for removido → todas as bibliotecas vinculadas a ele são apagadas.
 
-## Padrões de Projeto e Boas Práticas
+---
 
-- Domain-Driven Design (entidades, value objects, regras de negócio).
-- Repository Pattern para abstração de persistência.
-- Factory Methods para criação controlada de Value Objects (`Password.Create`, `Password.FromHash`).
-- Dependency Injection nativa do ASP.NET Core.
-- Event-driven architecture para desacoplamento entre microserviços.
-- BackgroundService para consumers de longa execução.
-- Tratamento seguro de senhas: hashing irreversível, verificação por comparação segura.
-- Separação de responsabilidades e testes unitários/integração.
+## Observabilidade
+- **Logs estruturados** com `CorrelationId` para rastrear requisições e eventos.  
+- **Swagger** para documentação e testes de endpoints.  
+- **GlobalExceptionMiddleware** para captura e padronização de erros.
 
-## Projetos (estrutura)
+---
 
-- `FCG-Users.Api` — API HTTP e configuração de autenticação/middlewares.
-- `FCG-Users.Consumer` — Worker Service para consumir eventos do Service Bus.
-- `FCG-Users.Domain` — Modelos do domínio (Entities, Value Objects, Exceptions).
-- `FCG-Users.Application` — Casos de uso, serviços de aplicação, DTOs e validações.
-- `FCG-Users.Infrastructure` — Implementações de repositórios, integrações e configurações de persistência.
+## Competências demonstradas
+- Microsserviços  
+- Event Sourcing  
+- CQRS  
+- Event-Driven Architecture (EDA)  
+- Azure Service Bus  
+- MongoDB (Event Store)  
+- Entity Framework Core  
+- .NET 8 / ASP.NET Core  
+- Repository Pattern  
+- Dependency Injection  
+- Middleware personalizado  
+- Idempotência  
+- Docker  
+- Swagger
 
-## Requisitos
+---
 
-- .NET SDK 8.0 
-- Azure Service Bus com Topic/Subscription configurados
-- Banco de dados suportado pela implementação em `Infrastructure`
-- Variáveis de ambiente ou __User Secrets__ para segredos
+## Objetivo
+Este projeto foi desenvolvido como parte de um portfólio pessoal para demonstrar:
+- Conhecimento em **arquitetura de microsserviços**.  
+- Aplicação prática de **event sourcing** e **mensageria assíncrona**.  
+- Uso de **padrões de projeto** e boas práticas de engenharia de software.  
 
-## Configuração
-
-Chaves principais (appsettings.json / variáveis de ambiente):
-- `ConnectionStrings:DefaultConnection`
-- `ServiceBus:ConnectionString`
-- `ServiceBus:Topics:Users`
-- `ServiceBus:Subscriptions:Users`
-- JWT: `Jwt:Key`, `Jwt:Issuer`, `Jwt:ExpiresInMinutes`
-
-Exemplo mínimo (`appsettings.Development.json`):

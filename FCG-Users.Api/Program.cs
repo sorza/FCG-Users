@@ -3,8 +3,6 @@ using FCG_Users.Application.Shared;
 using FCG_Users.Infrastructure.Shared;
 using FCG_Users.Infrastructure.Shared.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -18,7 +16,7 @@ namespace FCG_Users.Api
         {
             var builder = WebApplication.CreateBuilder(args);   
 
-            builder.WebHost.UseUrls("http://0.0.0.0:80");
+           // builder.WebHost.UseUrls("http://0.0.0.0:80");
             
             builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddApplicationServices();           
