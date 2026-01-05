@@ -1,4 +1,4 @@
-# 👤 FCG-Users
+# FCG-Users
 
 O projeto **FCG-Users** faz parte de um ecossistema de microsserviços voltado para gerenciamento de usuários e suas bibliotecas de jogos.  
 Ele foi desenvolvido com foco em **event sourcing**, **arquitetura orientada a eventos** e **boas práticas de microsserviços**.
