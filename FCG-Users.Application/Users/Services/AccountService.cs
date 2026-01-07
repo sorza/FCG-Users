@@ -14,7 +14,7 @@ namespace FCG_Users.Application.Users.Services
 {
     public class AccountService(IAccountRepository repository, IJwtTokenService jwtService, IEventPublisher publisher, IValidator<AccountRequest> validator, IEventStore eventStore) : IAccountService
     {
-        public async Task<Result<AuthResponse>> AuthAsync(AuthRequest request, CancellationToken cancellationToken = default)
+        public async Task<Result<AuthResponse>> AuthAsync(AuthRequest request, string ip, string device, string correlationId, CancellationToken cancellationToken = default)
         {           
             var email = Email.Create(request.Email);
 
@@ -29,7 +29,12 @@ namespace FCG_Users.Application.Users.Services
             if(!conta.Active)
                 return Result.Failure<AuthResponse>(new Error("403", "Usuário inativo."));
 
-            var tokenInfo = jwtService.CreateToken(conta);
+            var tokenInfo = jwtService.CreateToken(conta);            
+
+            var evt = new UserLoginEvent(conta.Id.ToString(), conta.Name, ip, device);
+
+            await eventStore.AppendAsync(conta.Id.ToString(), evt, 0, correlationId);
+            await publisher.PublishAsync(evt, "UserLogin", correlationId);
 
             var response = new AuthResponse(tokenInfo.Token, tokenInfo.ExpiresAt);
 
@@ -88,9 +93,10 @@ namespace FCG_Users.Application.Users.Services
 
             if (usuario is null)
                 return Result.Failure(new Error("404", "Usuário não encontrado"));
-
             
             var evt = new UserDeletedEvent(usuario.Id.ToString(), usuario.Email);
+
+            await eventStore.AppendAsync(evt.AggregateId, evt, 0, correlationId);
             await publisher.PublishAsync(evt, "UserDeleted", correlationId);
 
             return Result.Success(new AccountResponse(

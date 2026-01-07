@@ -1,11 +1,11 @@
 ﻿using Azure.Messaging.ServiceBus;
+using FCG.Shared.Contracts.Events.Publisher;
 using FCG.Shared.Contracts.Events.Store;
 using FCG.Shared.Contracts.Interfaces;
 using FCG_Users.Application.Shared.Interfaces;
 using FCG_Users.Application.Shared.Repositories;
 using FCG_Users.Infrastructure.Shared.Context;
 using FCG_Users.Infrastructure.Shared.Services;
-using FCG_Users.Infrastructure.Users.Events;
 using FCG_Users.Infrastructure.Users.Repositorories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

@@ -129,15 +129,6 @@ namespace FCG_Users.Api
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
-
-            app.MapGet("/health", () =>
-            {
-                return Results.Ok(new
-                {
-                    status = "Healthy",
-                    timestamp = DateTime.UtcNow
-                });
-            });
             
             app.Run();
         }

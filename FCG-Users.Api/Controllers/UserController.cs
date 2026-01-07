@@ -22,8 +22,9 @@ namespace FCG_Users.Api.Controllers
         [HttpPost]
         public async Task<IResult> CreateUserAsync(AccountRequest request, CancellationToken cancellation = default)
         {
-            var correlationId = HttpContext.Items["CorrelationId"]?.ToString();
-            var result = await service.CreateAccountAsync(request, correlationId!, cancellation);
+            var correlationId = HttpContext.Items["CorrelationId"]?.ToString();            
+
+            var result = await service.CreateAccountAsync(request, correlationId!, cancellation);            
 
             if (result.IsFailure)
             {
@@ -76,8 +77,12 @@ namespace FCG_Users.Api.Controllers
         [HttpPost]
         [Route("auth")]
         public async Task<IResult> AuthAsync(AuthRequest request, CancellationToken cancellation = default)
-        {           
-            var result = await service.AuthAsync(request, cancellation);
+        {            
+            var ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            var device = HttpContext.Request.Headers["User-Agent"].ToString();
+            var correlationId = HttpContext.Items["CorrelationId"]?.ToString();
+
+            var result = await service.AuthAsync(request, ip, device, correlationId!, cancellation);
 
             if (result.IsFailure)
             {
