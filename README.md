@@ -31,6 +31,15 @@ Ele foi desenvolvido com foco em **event sourcing**, **arquitetura orientada a e
 
 ---
 
+## Arquitetura e responsabilidades
+- Domain: Entidades, Value Objects (ex.: `Password`, `Email`), regras e exceções.
+- Application: Casos de uso, serviços de aplicação, DTOs e validações.
+- Infrastructure: Implementações de repositórios, integrações com Service Bus e banco de dados, injeção de dependências.
+- Api: Endpoints HTTP para autenticação e gerenciamento de contas.
+- Consumer: Worker Service (BackgroundService) que consome eventos do Azure Service Bus.
+
+---
+
 ## Padrões e Designs
 - **Repository Pattern** → abstração do acesso a dados.
 - **Dependency Injection (DI)** → desacoplamento e facilidade de testes.
