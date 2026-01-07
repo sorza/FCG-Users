@@ -1,4 +1,4 @@
-﻿using FCG_Users.Application.Shared.Results;
+﻿using FCG.Shared.Contracts.Results;
 using FCG_Users.Application.Users.Requests;
 using FCG_Users.Application.Users.Responses;
 
@@ -9,6 +9,7 @@ namespace FCG_Users.Application.Shared.Interfaces
         Task<Result<AccountResponse>> CreateAccountAsync(AccountRequest request, string correlationId, CancellationToken cancellationToken = default);
         Task<Result<AuthResponse>> AuthAsync(AuthRequest request, string ip, string device, string correlationId, CancellationToken cancellationToken = default);
         Task<Result<AccountResponse>> GetUserAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<Result<IEnumerable<AccountResponse>>> GetAllUsersAsync(CancellationToken cancellationToken = default);
         Task<Result> RemoveUserAsync(Guid id, string correlationId, CancellationToken cancellationToken = default);
     }
 }

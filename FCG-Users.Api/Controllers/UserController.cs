@@ -1,5 +1,5 @@
-﻿using FCG_Users.Application.Shared.Interfaces;
-using FCG_Users.Application.Shared.Results;
+﻿using FCG.Shared.Contracts.Results;
+using FCG_Users.Application.Shared.Interfaces;
 using FCG_Users.Application.Users.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -59,6 +59,20 @@ namespace FCG_Users.Api.Controllers
                     _ => TypedResults.BadRequest(new Error("400", result.Error.Message))
                 };
             }
+
+            return TypedResults.Ok(result.Value);
+
+        }
+
+        /// <summary>
+        /// Busca todos os usuários cadastrados.
+        /// </summary>
+        /// <param name="cancellation">Token de controle para monitorar cancelamento do processo.</param>
+        [ProducesResponseType(StatusCodes.Status200OK)]       
+        [HttpGet]
+        public async Task<IResult> GetAllUsersAsync(CancellationToken cancellation = default)
+        {
+            var result = await service.GetAllUsersAsync(cancellation);    
 
             return TypedResults.Ok(result.Value);
 

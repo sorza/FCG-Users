@@ -1,8 +1,8 @@
 ﻿using FCG.Shared.Contracts.Events.Domain.Users;
 using FCG.Shared.Contracts.Interfaces;
+using FCG.Shared.Contracts.Results;
 using FCG_Users.Application.Shared.Interfaces;
 using FCG_Users.Application.Shared.Repositories;
-using FCG_Users.Application.Shared.Results;
 using FCG_Users.Application.Users.Requests;
 using FCG_Users.Application.Users.Responses;
 using FCG_Users.Domain.Users.Entities;
@@ -69,6 +69,22 @@ namespace FCG_Users.Application.Users.Services
                 account.Active
             ));
 
+        }
+
+        public async Task<Result<IEnumerable<AccountResponse>>> GetAllUsersAsync(CancellationToken cancellationToken = default)
+        {
+            var result = await repository.GetAllAsync(); 
+
+            var users = result.Select(user => new AccountResponse(
+                user.Id,
+                user.Name,
+                user.Password,
+                user.Email,
+                user.Profile,
+                user.Active
+                ));
+
+            return Result.Success(users);
         }
 
         public async Task<Result<AccountResponse>> GetUserAsync(Guid id, CancellationToken cancellationToken = default)
