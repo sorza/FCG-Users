@@ -33,7 +33,10 @@ namespace FCG_Users.Application.Users.Services
 
             var evt = new UserLoginEvent(conta.Id.ToString(), conta.Name, ip, device);
 
-            await eventStore.AppendAsync(conta.Id.ToString(), evt, 0, correlationId);
+            var existingEvents = await eventStore.GetEventsAsync(conta.Id.ToString());
+            var currentVersion = existingEvents.Count;
+            
+            await eventStore.AppendAsync(conta.Id.ToString(), evt, currentVersion, correlationId);
             await publisher.PublishAsync(evt, "UserLogin", correlationId);
 
             var response = new AuthResponse(tokenInfo.Token, tokenInfo.ExpiresAt);
@@ -112,7 +115,10 @@ namespace FCG_Users.Application.Users.Services
             
             var evt = new UserDeletedEvent(usuario.Id.ToString(), usuario.Email);
 
-            await eventStore.AppendAsync(evt.AggregateId, evt, 0, correlationId);
+            var existingEvents = await eventStore.GetEventsAsync(evt.AggregateId);
+            var currentVersion = existingEvents.Count;
+            
+            await eventStore.AppendAsync(evt.AggregateId, evt, currentVersion, correlationId);
             await publisher.PublishAsync(evt, "UserDeleted", correlationId);
 
             return Result.Success(new AccountResponse(
