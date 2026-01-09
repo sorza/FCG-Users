@@ -5,6 +5,9 @@ on:
     branches: [ main, develop ]
     paths:
       - 'FCG-Users.Consumer/**'
+      - 'FCG-Users.Application/**'
+      - 'FCG-Users.Domain/**'
+      - 'FCG-Users.Infrastructure/**'
       - '.github/workflows/users-consumer-ci.yml'
 
 jobs:
