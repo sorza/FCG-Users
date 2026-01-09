@@ -9,6 +9,7 @@ namespace FCG_Users.Api.Controllers
 {
     [ApiController]
     [Route("api")]
+    [Authorize]
     public class UserController(IAccountService service) : ControllerBase
     {
         /// <summary>
@@ -19,6 +20,7 @@ namespace FCG_Users.Api.Controllers
         [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IResult> CreateUserAsync(AccountRequest request, CancellationToken cancellation = default)
         {
@@ -46,6 +48,7 @@ namespace FCG_Users.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id:guid}")]
         public async Task<IResult> GetUserByIdAsync(Guid id, CancellationToken cancellation = default)
         {           
@@ -68,7 +71,8 @@ namespace FCG_Users.Api.Controllers
         /// Busca todos os usuários cadastrados.
         /// </summary>
         /// <param name="cancellation">Token de controle para monitorar cancelamento do processo.</param>
-        [ProducesResponseType(StatusCodes.Status200OK)]       
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IResult> GetAllUsersAsync(CancellationToken cancellation = default)
         {
@@ -87,7 +91,8 @@ namespace FCG_Users.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]        
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [AllowAnonymous]
         [HttpPost]
         [Route("auth")]
         public async Task<IResult> AuthAsync(AuthRequest request, CancellationToken cancellation = default)
@@ -144,6 +149,7 @@ namespace FCG_Users.Api.Controllers
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:guid}")]
         public async Task<IResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
