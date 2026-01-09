@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace FCG_Users.Api.Controllers
 {
     [ApiController]
-    [Route("users")]
+    [Route("api")]
     public class UserController(IAccountService service) : ControllerBase
     {
         /// <summary>
