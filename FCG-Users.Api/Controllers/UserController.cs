@@ -50,6 +50,7 @@ namespace FCG_Users.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = "Admin")]
         [HttpGet("{id:guid}")]
+        [AllowAnonymous]
         public async Task<IResult> GetUserByIdAsync(Guid id, CancellationToken cancellation = default)
         {           
             var result = await service.GetUserAsync(id, cancellation);
