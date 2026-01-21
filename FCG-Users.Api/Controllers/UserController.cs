@@ -163,5 +163,13 @@ namespace FCG_Users.Api.Controllers
 
             return response;
         }
+
+        /// <summary>
+        /// Retorna 220 se a aplicação estiver saudável.
+        /// </summary>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [AllowAnonymous]
+        [HttpGet("/health")]
+        public async Task<IResult> Health() => TypedResults.Ok();
     }
 }
