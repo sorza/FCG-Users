@@ -163,5 +163,10 @@ namespace FCG_Users.Api.Controllers
 
             return response;
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [AllowAnonymous]
+        [HttpGet("health")]
+        public async Task<IResult> Health() => TypedResults.Ok();
     }
 }
