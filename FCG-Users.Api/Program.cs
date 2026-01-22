@@ -101,25 +101,25 @@ namespace FCG_Users.Api
             app.UseMiddleware<CorrelationIdMiddleware>();
 
 
-            using (var scope = app.Services.CreateScope())
-            {
-                var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
 
-                var retries = 5;
-                while (retries > 0)
-                {
-                    try
-                    {
-                        db.Database.Migrate();
-                        break;
-                    }
-                    catch
-                    {
-                        retries--;
-                        Thread.Sleep(2000); 
-                    }
-                }
-            }
+            //    var retries = 5;
+            //    while (retries > 0)
+            //    {
+            //        try
+            //        {
+            //            db.Database.Migrate();
+            //            break;
+            //        }
+            //        catch
+            //        {
+            //            retries--;
+            //            Thread.Sleep(2000); 
+            //        }
+            //    }
+            //}
             
             app.UseSwagger();
             app.UseSwaggerUI();
