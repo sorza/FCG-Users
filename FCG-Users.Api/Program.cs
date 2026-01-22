@@ -128,7 +128,8 @@ namespace FCG_Users.Api
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
-            app.MapHealthChecks("/health");
+            app.MapHealthChecks("/health/live");
+            app.MapHealthChecks("/health/ready");
 
             app.Run();
         }
