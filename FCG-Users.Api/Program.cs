@@ -18,6 +18,7 @@ namespace FCG_Users.Api
             
             builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddApplicationServices();
+            builder.Services.AddHealthChecks();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -127,6 +128,7 @@ namespace FCG_Users.Api
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
+            app.MapHealthChecks("/health");
 
             app.Run();
         }
