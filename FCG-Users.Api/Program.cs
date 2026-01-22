@@ -17,7 +17,8 @@ namespace FCG_Users.Api
             var builder = WebApplication.CreateBuilder(args);   
             
             builder.Services.AddInfrastructureServices(builder.Configuration);
-            builder.Services.AddApplicationServices();           
+            builder.Services.AddApplicationServices();
+            builder.Services.AddHealthChecks();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
