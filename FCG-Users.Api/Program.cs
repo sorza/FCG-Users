@@ -128,10 +128,6 @@ namespace FCG_Users.Api
             app.UseAuthorization();
             app.MapControllers();
 
-            app.MapGet("/", () => Results.Ok("Users API OK"));
-            app.MapGet("/users", () => Results.Ok("Users endpoint API OK"));
-            app.MapGet("/health", () => Results.Ok("Healthy"));
-
             app.Run();
         }
     }
