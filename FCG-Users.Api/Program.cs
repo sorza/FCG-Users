@@ -16,6 +16,11 @@ namespace FCG_Users.Api
         {
             var builder = WebApplication.CreateBuilder(args);   
             
+            builder.Services.AddApplicationInsightsTelemetry(options =>
+            {
+                options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+            });
+            
             builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddApplicationServices();
 
