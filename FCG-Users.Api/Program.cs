@@ -104,30 +104,32 @@ namespace FCG_Users.Api
             
             app.UseMiddleware<GlobalExceptionMiddleware>();
             app.UseMiddleware<CorrelationIdMiddleware>();
-
-
-            //using (var scope = app.Services.CreateScope())
-            //{
-            //    var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
-
-            //    var retries = 5;
-            //    while (retries > 0)
-            //    {
-            //        try
-            //        {
-            //            db.Database.Migrate();
-            //            break;
-            //        }
-            //        catch
-            //        {
-            //            retries--;
-            //            Thread.Sleep(2000); 
-            //        }
-            //    }
-            //}
             
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            
+            if (app.Environment.IsDevelopment())
+            {
+                using (var scope = app.Services.CreateScope())
+                {
+                    var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
+
+                    var retries = 5;
+                    while (retries > 0)
+                    {
+                        try
+                        {
+                            db.Database.Migrate();
+                            break;
+                        }
+                        catch
+                        {
+                            retries--;
+                            Thread.Sleep(2000); 
+                        }
+                    }
+                }
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
             app.UseAuthentication();
             app.UseAuthorization();
