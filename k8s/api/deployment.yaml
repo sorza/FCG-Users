@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-api
+  namespace: users
+  labels:
+    app: users-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users-api
+  template:
+    metadata:
+      labels:
+        app: users-api
+    spec:
+      containers:
+      - name: users-api
+        image: alexandresorza/fcg-users-api:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: secrets-store
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: fcg-config
+              key: ASPNETCORE_ENVIRONMENT
+        - name: ApplicationInsights__ConnectionString
+          valueFrom:
+            secretKeyRef:
+              name: fcg-secrets
+              key: appinsights-connection-string
+        - name: ConnectionStrings__DefaultConnection
+          valueFrom:
+            secretKeyRef:
+              name: fcg-secrets
+              key: sql-users-connection
+        - name: ServiceBus__ConnectionString
+          valueFrom:
+            secretKeyRef:
+              name: fcg-secrets
+              key: servicebus-connection
+        - name: ServiceBus__Topics__Users
+          valueFrom:
+            configMapKeyRef:
+              name: fcg-config
+              key: TOPIC_USERS
+        - name: MongoSettings__ConnectionString
+          valueFrom:
+            secretKeyRef:
+              name: fcg-secrets
+              key: cosmosdb-connection
+        - name: MongoSettings__Database
+          value: "EventStoreDb"
+        - name: MongoSettings__Collection
+          value: "Events"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+      volumes:
+      - name: secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "fcg-keyvault-secrets"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-api-service
+  namespace: users
+spec:
+  selector:
+    app: users-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP

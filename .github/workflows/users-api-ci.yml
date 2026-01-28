@@ -52,6 +52,6 @@ jobs:
     
     - name: Deploy to AKS
       run: |
-        kubectl apply -f ../k8s/shared/secretproviderclass-users.yaml
-        kubectl apply -f ../k8s/users/api/
+        kubectl apply -f k8s/secretproviderclass-users.yaml
+        kubectl apply -f k8s/api/
         kubectl rollout status deployment/users-api -n users --timeout=300s
