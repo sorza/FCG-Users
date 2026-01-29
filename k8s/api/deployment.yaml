@@ -19,7 +19,7 @@ spec:
       - name: users-api
         image: alexandresorza/fcg-users-api:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8080
         volumeMounts:
         - name: secrets-store
           mountPath: "/mnt/secrets-store"
