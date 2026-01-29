@@ -73,17 +73,3 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: "fcg-keyvault-secrets"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: users-api-service
-  namespace: users
-spec:
-  selector:
-    app: users-api
-  ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 80
-  type: ClusterIP
