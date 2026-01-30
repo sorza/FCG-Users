@@ -18,6 +18,7 @@ spec:
       containers:
       - name: users-api
         image: alexandresorza/fcg-users-api:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         volumeMounts:
