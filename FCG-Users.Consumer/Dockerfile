@@ -19,7 +19,6 @@ RUN dotnet publish "FCG-Users.Consumer.csproj" \
     -c Release \
     -o /app/publish \
     /p:UseAppHost=false \
-    /p:InvariantGlobalization=true \
     --no-restore
 
 FROM mcr.microsoft.com/dotnet/runtime:8.0-alpine AS runtime
