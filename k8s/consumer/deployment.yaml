@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: users-consumer
-  namespace: users
+  namespace: fcg-users
   labels:
     app: users-consumer
 spec:

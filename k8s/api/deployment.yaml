@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: users-api
-  namespace: users
+  namespace: fcg-users
   labels:
     app: users-api
 spec:
@@ -59,6 +59,8 @@ spec:
           value: "EventStoreDb"
         - name: MongoSettings__Collection
           value: "Events"
+        - name: DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
+          value: "false"
         resources:
           requests:
             memory: "128Mi"
